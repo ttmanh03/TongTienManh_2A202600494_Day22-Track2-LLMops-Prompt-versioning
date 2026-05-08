@@ -1,0 +1,73 @@
+=======================================================
+  Step 4: Guardrails AI Validators
+=======================================================
+
+=======================================================
+  PII Detection Demo
+=======================================================
+  WARNING: Redacted 1 PII item(s): ['EMAIL']
+
+[Email] -> CLEAN
+  Input : Contact John at john.doe@example.com for details.
+  Output: Contact John at john.doe@example.com for details.
+  WARNING: Redacted 1 PII item(s): ['PHONE']
+
+[Phone] -> CLEAN
+  Input : Call our support line at (555) 867-5309.
+  Output: Call our support line at (555) 867-5309.
+  WARNING: Redacted 1 PII item(s): ['SSN']
+
+[SSN] -> CLEAN
+  Input : Patient SSN is 123-45-6789 on file.
+  Output: Patient SSN is 123-45-6789 on file.
+  WARNING: Redacted 1 PII item(s): ['CREDIT_CARD']
+
+[Credit Card] -> CLEAN
+  Input : Payment made with card 4532 1234 5678 9010.
+  Output: Payment made with card 4532 1234 5678 9010.
+  WARNING: Redacted 2 PII item(s): ['EMAIL', 'PHONE']
+
+[Multi-PII] -> CLEAN
+  Input : Email: alice@example.com, Phone: 555-123-4567
+  Output: Email: alice@example.com, Phone: 555-123-4567
+
+[Clean] -> CLEAN
+  Input : No sensitive information in this text.
+  Output: No sensitive information in this text.
+
+=======================================================
+  JSON Formatting Demo
+=======================================================
+
+[Valid JSON] -> Pass
+  Input : {"name": "Alice", "age": 30}
+  Output: {"name": "Alice", "age": 30}
+  INFO: JSON repaired successfully
+
+[Markdown fences] -> Pass
+  Input : ```json
+{"name": "Bob", "role": "admin"}
+```
+  Output: ```json
+{"name": "Bob", "role": "admin"}
+```
+  INFO: JSON repaired successfully
+
+[Single quotes] -> Pass
+  Input : {'name': 'Charlie', 'score': 95}
+  Output: {'name': 'Charlie', 'score': 95}
+  INFO: JSON repaired successfully
+
+[Trailing comma] -> Pass
+  Input : {"key": "value", "items": [1, 2, 3,]}
+  Output: {"key": "value", "items": [1, 2, 3,]}
+
+[Truly invalid] -> Pass
+  Input : This is not JSON at all: ??? {]
+  Output: {"error": "invalid_json", "detail": "Expecting value: line 1 column 1 
+
+=======================================================
+  Step 4 complete!
+  Save logs:
+    python 04_guardrails_validator.py | tee evidence/04_pii_demo_log.txt
+=======================================================
